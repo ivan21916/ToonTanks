@@ -7,6 +7,8 @@
 #include "PawnBase.generated.h"
 
 class UCapsuleComponent;
+class AProjectileBase;
+class UHealthComponent;
 
 UCLASS()
 class TOONTANKS_API APawnBase : public APawn
@@ -17,6 +19,8 @@ public:
 	// Sets default values for this pawn's properties
 	APawnBase();
 
+	void PawnDestroyed();
+	virtual void HandleDestruction();
 	// UPROPERTY(VisibleAnywhere, Category = "DEMO")
 	// int VisibleAnywhere;
 	// UPROPERTY(VisibleDefaultsOnly, Category = "DEMO")
@@ -36,9 +40,8 @@ protected:
 
 	void Fire();
 
-	virtual void HandleDestruction();
-
 private:
+	// COMPONENTS
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))	
 	UCapsuleComponent* CapsuleComp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -47,5 +50,17 @@ private:
 	UStaticMeshComponent* TurretMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UHealthComponent* HealthComponent;
+	
+	// VARIABLES
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile Type", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AProjectileBase> ProjectileClass;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* DeathParticle;
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* DeathSound;
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<UCameraShake> DeathShake;
 };
